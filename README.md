@@ -23,6 +23,7 @@
    - Попробуйте создать заявку, сменить статус прямо из карточки списка, отфильтровать по названию и статусу.
    - Исходный код и тесты RLS доступны в репозитории [1wm9k/automation-requests](https://github.com/1wm9k/automation-requests).
 2. **Задача 1 (Telegram-бот):**
+   - Запустите бота [@wm9k_servicedemo_bot](https://t.me/wm9k_servicedemo_bot) для проверки работы.
    - Ознакомьтесь с логикой в [1-telegram-menu-bot/README.md](1-telegram-menu-bot/README.md).
    - Посмотрите тестовую [Google Таблицу](https://docs.google.com/spreadsheets/d/1cOWvfi8D-Kyd-eLu8oHBrlbB7rGw_leULPt8JSDrCHE/edit?usp=sharing) и галерею работы бота на 2, 5 и 9 активных услугах.
    - Файл [workflow.json](1-telegram-menu-bot/workflow.json) готов к импорту в n8n (секреты очищены).
