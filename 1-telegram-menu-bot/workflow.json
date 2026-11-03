@@ -1,0 +1,399 @@
+{
+  "name": "Telegram-Bot",
+  "nodes": [
+    {
+      "parameters": {
+        "updates": [
+          "message",
+          "callback_query"
+        ],
+        "additionalFields": {}
+      },
+      "id": "d0f9f1b0-7cea-4712-a1a9-26e652b4f760",
+      "name": "Telegram Trigger1",
+      "type": "n8n-nodes-base.telegramTrigger",
+      "typeVersion": 1.5,
+      "position": [
+        -32,
+        160
+      ],
+      "webhookId": "5108db40-8608-48fb-93a7-897559347129",
+      "credentials": {
+        "telegramApi": {
+          "id": "cNoDyLAu6QjDnNhP",
+          "name": "TelegramBot"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "bt-0001",
+              "name": "botToken",
+              "value": "<TELEGRAM_BOT_TOKEN>",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "9d456066-80c0-4edc-8d90-2159664b1e81",
+      "name": "Bot config",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        720,
+        272
+      ]
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "1cOWvfi8D-Kyd-eLu8oHBrlbB7rGw_leULPt8JSDrCHE",
+          "mode": "list",
+          "cachedResultName": "TelegramBot",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1cOWvfi8D-Kyd-eLu8oHBrlbB7rGw_leULPt8JSDrCHE/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "3",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1cOWvfi8D-Kyd-eLu8oHBrlbB7rGw_leULPt8JSDrCHE/edit#gid=0"
+        },
+        "options": {}
+      },
+      "id": "37ca40b2-e2c5-439f-a5c4-2b3abbbbd338",
+      "name": "Read GoogleSheets",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        512,
+        16
+      ],
+      "alwaysOutputData": true,
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "9PGdqHNlar9ecaAM",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "1cOWvfi8D-Kyd-eLu8oHBrlbB7rGw_leULPt8JSDrCHE",
+          "mode": "list",
+          "cachedResultName": "TelegramBot",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1cOWvfi8D-Kyd-eLu8oHBrlbB7rGw_leULPt8JSDrCHE/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "3",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1cOWvfi8D-Kyd-eLu8oHBrlbB7rGw_leULPt8JSDrCHE/edit#gid=0"
+        },
+        "options": {}
+      },
+      "id": "0bf33d7f-201c-4788-9521-3318da4d6cf4",
+      "name": "Read GoogleSheets1",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        944,
+        272
+      ],
+      "alwaysOutputData": true,
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "9PGdqHNlar9ecaAM",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const truthy = ['true', '1', 'yes', 'да', '+'];\nconst cb = $('Telegram Trigger1').first().json.callback_query;\nconst selectedId = String(cb.data).trim();\nconst found = $input.all()\n  .map(i => i.json)\n  .find(r => r.id !== undefined && String(r.id).trim() === selectedId);\nconst active = found && truthy.includes(String(found.active).trim().toLowerCase());\nreturn [{ json: {\n  queryId: cb.id,\n  chatId: cb.message.chat.id,\n  serviceId: selectedId,\n  text: active ? 'Вы выбрали услугу: ' + found.name : 'Эта услуга больше недоступна. Отправьте /start, чтобы обновить меню.'\n} }];"
+      },
+      "id": "59e5e370-0afc-4c77-84ad-b776834ab660",
+      "name": "Find service",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        720,
+        16
+      ]
+    },
+    {
+      "parameters": {
+        "resource": "callback",
+        "queryId": "={{ $json.queryId }}",
+        "additionalFields": {}
+      },
+      "id": "6dece8b2-e1cb-4d56-bc51-25e3fcc85d54",
+      "name": "Callback",
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        944,
+        16
+      ],
+      "webhookId": "37b5ff91-bde4-4556-a8e9-557cf81cf6f6",
+      "credentials": {
+        "telegramApi": {
+          "id": "cNoDyLAu6QjDnNhP",
+          "name": "TelegramBot"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "chatId": "={{ $('Find service').first().json.chatId }}",
+        "text": "={{ $('Find service').first().json.text }}",
+        "additionalFields": {
+          "appendAttribution": false
+        }
+      },
+      "id": "5575c742-11ca-4f62-9c96-c2cff103e055",
+      "name": "Send Services",
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        1168,
+        16
+      ],
+      "webhookId": "898ea075-1725-467a-9193-f92093fbc77f",
+      "credentials": {
+        "telegramApi": {
+          "id": "cNoDyLAu6QjDnNhP",
+          "name": "TelegramBot"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const truthy = ['true', '1', 'yes', 'да', '+'];\nconst services = $input.all()\n  .map(i => i.json)\n  .filter(r => r.id !== undefined && r.id !== null && String(r.id).trim() !== '')\n  .filter(r => truthy.includes(String(r.active).trim().toLowerCase()));\nconst chatId = $('Telegram Trigger1').first().json.message.chat.id;\nconst inline_keyboard = services.map(s => [{ text: String(s.name), callback_data: String(s.id).trim() }]);\nconst hasServices = services.length > 0;\nconst body = { chat_id: chatId, text: hasServices ? 'Выберите услугу:' : 'К сожалению, сейчас нет доступных услуг. Загляните позже.' };\nif (hasServices) body.reply_markup = { inline_keyboard };\nreturn [{ json: { body, count: services.length } }];"
+      },
+      "id": "66220073-2da8-447d-b025-1dc7fae59b22",
+      "name": "Keyboard",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1168,
+        272
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "=https://api.telegram.org/bot{{ $('Bot config').first().json.botToken }}/sendMessage",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify($json.body) }}",
+        "options": {}
+      },
+      "id": "3cef6ef5-eaf7-44f1-bc36-0ecfb7b5af63",
+      "name": "Send Inline",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        1408,
+        272
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "d442ee0b-15ea-4d3d-a343-c40346ca8859",
+              "leftValue": "={{ (($json.message && $json.message.text) || '').trim().split(' ')[0].split('@')[0] }}",
+              "rightValue": "/start",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "3423222a-4ddb-4acf-a247-34fb20847c90",
+      "name": "Is /start command",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        512,
+        272
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "cb1",
+              "leftValue": "={{ !!$json.callback_query }}",
+              "rightValue": true,
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "1e73eb63-04d7-4405-9cfd-af1678bf4915",
+      "name": "Is button click",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        192,
+        160
+      ]
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Telegram Trigger1": {
+      "main": [
+        [
+          {
+            "node": "Is button click",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Bot config": {
+      "main": [
+        [
+          {
+            "node": "Read GoogleSheets1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Read GoogleSheets": {
+      "main": [
+        [
+          {
+            "node": "Find service",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Read GoogleSheets1": {
+      "main": [
+        [
+          {
+            "node": "Keyboard",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Find service": {
+      "main": [
+        [
+          {
+            "node": "Callback",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Callback": {
+      "main": [
+        [
+          {
+            "node": "Send Services",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Keyboard": {
+      "main": [
+        [
+          {
+            "node": "Send Inline",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Is /start command": {
+      "main": [
+        [
+          {
+            "node": "Bot config",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Is button click": {
+      "main": [
+        [
+          {
+            "node": "Read GoogleSheets",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Is /start command",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "versionId": "d91d0d17-e253-4c6d-8878-8c70c8cf816c",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "c629bb1b276cc644c98dae32871c2f67c4aa93ee4ff877f65341dfba6410a329"
+  },
+  "nodeGroups": [],
+  "id": "vAeMCdw3PMuxiHyC",
+  "tags": []
+}
